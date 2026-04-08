@@ -7,11 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Naskh+Arabic:wght@500;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --pink: #FF6B9D;
@@ -22,6 +18,7 @@
             --orange: #FB923C;
             --red: #F87171;
             --bg: #FFF7ED;
+            --teal: #2DD4BF;
         }
 
         body {
@@ -31,9 +28,44 @@
             overflow-x: hidden;
         }
 
-        /* ---- HOME SCREEN ---- */
-        .home-screen {
+        .arabic-text {
+            font-family: 'Noto Naskh Arabic', serif;
+        }
+
+        /* ---- STAR COUNTER (persistent) ---- */
+        .star-counter {
+            position: fixed;
+            top: 20px;
+            right: 25px;
+            background: white;
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--orange);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
             display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s;
+        }
+
+        .star-counter.pop {
+            animation: star-pop 0.4s ease-out;
+        }
+
+        @keyframes star-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* ---- HOME SCREEN ---- */
+        .screen { display: none; }
+        .screen.active { display: flex; }
+
+        .home-screen {
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -45,27 +77,53 @@
             font-size: 3.5rem;
             color: var(--pink);
             text-shadow: 3px 3px 0 #FFD6E7;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .home-screen .subtitle {
             font-size: 1.5rem;
             color: var(--purple);
-            margin-bottom: 50px;
+            margin-bottom: 15px;
+        }
+
+        /* Mode toggle */
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 35px;
+        }
+
+        .mode-btn {
+            padding: 10px 28px;
+            border-radius: 50px;
+            border: 3px solid #E5E7EB;
+            background: white;
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #9CA3AF;
+        }
+
+        .mode-btn.active {
+            border-color: var(--pink);
+            background: var(--pink);
+            color: white;
         }
 
         .categories {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            max-width: 900px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            max-width: 950px;
             width: 100%;
         }
 
         .category-card {
             background: white;
             border-radius: 30px;
-            padding: 40px 20px;
+            padding: 35px 15px;
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
@@ -79,42 +137,38 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.12);
         }
 
-        .category-card:active {
-            transform: scale(0.97);
-        }
+        .category-card:active { transform: scale(0.97); }
 
         .category-card .icon {
-            font-size: 4rem;
-            margin-bottom: 15px;
+            font-size: 3.5rem;
+            margin-bottom: 12px;
             display: block;
         }
 
         .category-card .label {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
         }
 
         .card-english { border-color: var(--blue); }
         .card-english .label { color: var(--blue); }
-
         .card-arabic { border-color: var(--green); }
         .card-arabic .label { color: var(--green); }
-
         .card-numbers { border-color: var(--orange); }
         .card-numbers .label { color: var(--orange); }
-
         .card-shapes { border-color: var(--purple); }
         .card-shapes .label { color: var(--purple); }
-
         .card-arabic-numbers { border-color: var(--red); }
         .card-arabic-numbers .label { color: var(--red); }
-
         .card-arabic-shapes { border-color: var(--yellow); }
         .card-arabic-shapes .label { color: var(--yellow); }
+        .card-colors { border-color: var(--teal); }
+        .card-colors .label { color: var(--teal); }
+        .card-arabic-colors { border-color: #F472B6; }
+        .card-arabic-colors .label { color: #F472B6; }
 
         /* ---- LESSON SCREEN ---- */
         .lesson-screen {
-            display: none;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
@@ -150,10 +204,7 @@
             border-color: var(--pink);
         }
 
-        .lesson-title {
-            font-size: 1.8rem;
-            color: #6B7280;
-        }
+        .lesson-title { font-size: 1.8rem; color: #6B7280; }
 
         .progress-text {
             font-size: 1.2rem;
@@ -161,7 +212,6 @@
             font-weight: 700;
         }
 
-        /* Main display card */
         .display-card {
             background: white;
             border-radius: 40px;
@@ -180,9 +230,7 @@
             transition: transform 0.2s;
         }
 
-        .display-card:active {
-            transform: scale(0.97);
-        }
+        .display-card:active { transform: scale(0.97); }
 
         .display-char {
             font-size: 12rem;
@@ -190,19 +238,10 @@
             user-select: none;
         }
 
-        .display-char.arabic {
-            font-family: 'Noto Naskh Arabic', serif;
-        }
-
         .display-name {
             font-size: 2rem;
             color: #6B7280;
             margin-top: 10px;
-        }
-
-        .display-name.arabic {
-            font-family: 'Noto Naskh Arabic', serif;
-            font-size: 2.2rem;
         }
 
         .tap-hint {
@@ -212,7 +251,15 @@
             color: #D1D5DB;
         }
 
-        /* Navigation arrows */
+        /* Color swatch for colors category */
+        .color-swatch {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
         .nav-arrows {
             display: flex;
             gap: 30px;
@@ -234,27 +281,154 @@
             user-select: none;
         }
 
-        .nav-btn:hover {
+        .nav-btn:hover { border-color: var(--blue); color: var(--blue); }
+        .nav-btn:active { transform: scale(0.9); }
+
+        /* ---- MATCH GAME SCREEN ---- */
+        .game-screen {
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-prompt {
+            font-size: 1.6rem;
+            color: #6B7280;
+            margin-bottom: 10px;
+        }
+
+        .game-question {
+            font-size: 8rem;
+            line-height: 1;
+            margin-bottom: 15px;
+            user-select: none;
+        }
+
+        .game-score {
+            font-size: 1.2rem;
+            color: #9CA3AF;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .game-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .game-option {
+            background: white;
+            border: 4px solid #E5E7EB;
+            border-radius: 25px;
+            padding: 30px 15px;
+            font-size: 4rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            line-height: 1;
+        }
+
+        .game-option:hover {
             border-color: var(--blue);
-            color: var(--blue);
+            transform: scale(1.05);
         }
 
-        .nav-btn:active {
-            transform: scale(0.9);
+        .game-option:active { transform: scale(0.95); }
+
+        .game-option.correct {
+            border-color: var(--green);
+            background: #ECFDF5;
+            animation: shake-yes 0.5s ease-out;
         }
 
-        /* Shapes specific */
-        .shape-svg {
-            width: 200px;
-            height: 200px;
+        .game-option.wrong {
+            border-color: var(--red);
+            background: #FEF2F2;
+            animation: shake-no 0.5s ease-out;
         }
 
-        /* Confetti burst on tap */
-        .confetti {
+        .game-option .option-name {
+            font-size: 1.1rem;
+            color: #9CA3AF;
+            margin-top: 5px;
+        }
+
+        @keyframes shake-yes {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake-no {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+
+        /* Game result overlay */
+        .game-result {
+            display: none;
             position: fixed;
-            pointer-events: none;
-            z-index: 9999;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
         }
+
+        .game-result.active { display: flex; }
+
+        .game-result-card {
+            background: white;
+            border-radius: 40px;
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: bounce-in 0.5s ease-out;
+        }
+
+        .game-result-card .trophy { font-size: 5rem; margin-bottom: 15px; display: block; }
+        .game-result-card h2 { font-size: 2rem; color: var(--pink); margin-bottom: 10px; }
+        .game-result-card p { font-size: 1.3rem; color: #6B7280; margin-bottom: 25px; }
+
+        .game-result-card .stars-earned {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .play-again-btn {
+            padding: 15px 40px;
+            border-radius: 50px;
+            border: none;
+            background: var(--pink);
+            color: white;
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+
+        .play-again-btn:hover { transform: scale(1.05); }
+        .play-again-btn.secondary {
+            background: white;
+            color: var(--pink);
+            border: 3px solid var(--pink);
+        }
+
+        /* ---- CONFETTI ---- */
+        .confetti { position: fixed; pointer-events: none; z-index: 9999; }
 
         .confetti-piece {
             position: absolute;
@@ -269,7 +443,6 @@
             100% { transform: translateY(200px) rotate(720deg); opacity: 0; }
         }
 
-        /* Bounce animation on display */
         @keyframes bounce-in {
             0% { transform: scale(0.3); opacity: 0; }
             50% { transform: scale(1.1); }
@@ -277,11 +450,9 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .bounce-in {
-            animation: bounce-in 0.5s ease-out;
-        }
+        .bounce-in { animation: bounce-in 0.5s ease-out; }
 
-        /* Stars animation */
+        /* Stars background */
         .stars-container {
             position: fixed;
             top: 0; left: 0;
@@ -302,62 +473,94 @@
             50% { transform: translateY(10px) rotate(180deg); }
             75% { transform: translateY(-20px) rotate(270deg); }
         }
+
+        /* Big star burst for game correct */
+        .big-star-burst {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            pointer-events: none;
+            z-index: 300;
+            animation: big-star 0.8s ease-out forwards;
+        }
+
+        @keyframes big-star {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.5) rotate(180deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
+
+    <!-- Star counter -->
+    <div class="star-counter" id="starCounter">
+        <span>&#11088;</span>
+        <span id="starCount">0</span>
+    </div>
 
     <!-- Floating decorative stars -->
     <div class="stars-container" id="stars"></div>
 
     <!-- HOME SCREEN -->
-    <div class="home-screen" id="homeScreen">
+    <div class="screen home-screen active" id="homeScreen">
         <h1>Mariam's World</h1>
         <p class="subtitle">Tap to start learning!</p>
-        <div class="categories">
-            <div class="category-card card-english" onclick="startLesson('english')">
-                <span class="icon">🔤</span>
-                <span class="label">English Letters</span>
-            </div>
-            <div class="category-card card-arabic" onclick="startLesson('arabic')">
-                <span class="icon">🕌</span>
-                <span class="label">Arabic Letters</span>
-            </div>
-            <div class="category-card card-numbers" onclick="startLesson('numbers')">
-                <span class="icon">🔢</span>
-                <span class="label">Numbers</span>
-            </div>
-            <div class="category-card card-shapes" onclick="startLesson('shapes')">
-                <span class="icon">🔷</span>
-                <span class="label">Shapes</span>
-            </div>
-            <div class="category-card card-arabic-numbers" onclick="startLesson('arabicNumbers')">
-                <span class="icon">🔢</span>
-                <span class="label">الأرقام العربية</span>
-            </div>
-            <div class="category-card card-arabic-shapes" onclick="startLesson('arabicShapes')">
-                <span class="icon">🔶</span>
-                <span class="label">الأشكال بالعربي</span>
-            </div>
+
+        <div class="mode-toggle">
+            <button class="mode-btn active" id="modeLearn" onclick="setMode('learn')">Learn</button>
+            <button class="mode-btn" id="modeGame" onclick="setMode('game')">Match Game</button>
         </div>
+
+        <div class="categories" id="categoriesGrid"></div>
     </div>
 
     <!-- LESSON SCREEN -->
-    <div class="lesson-screen" id="lessonScreen">
+    <div class="screen lesson-screen" id="lessonScreen">
         <div class="top-bar">
-            <button class="back-btn" onclick="goHome()">←</button>
+            <button class="back-btn" onclick="goHome()">&#8592;</button>
             <span class="lesson-title" id="lessonTitle"></span>
             <span class="progress-text" id="progressText"></span>
         </div>
 
         <div class="display-card" id="displayCard" onclick="speakCurrent()">
+            <div id="displayVisual"></div>
             <div class="display-char" id="displayChar"></div>
             <div class="display-name" id="displayName"></div>
             <div class="tap-hint">Tap to hear!</div>
         </div>
 
         <div class="nav-arrows">
-            <button class="nav-btn" onclick="prev()">◀</button>
-            <button class="nav-btn" onclick="next()">▶</button>
+            <button class="nav-btn" onclick="prev()">&#9664;</button>
+            <button class="nav-btn" onclick="next()">&#9654;</button>
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div class="screen game-screen" id="gameScreen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()">&#8592;</button>
+            <span class="lesson-title" id="gameTitle"></span>
+            <span class="game-score" id="gameScore"></span>
+        </div>
+
+        <p class="game-prompt" id="gamePrompt">Find this one!</p>
+        <div class="game-question" id="gameQuestion"></div>
+
+        <div class="game-options" id="gameOptions"></div>
+    </div>
+
+    <!-- GAME RESULT OVERLAY -->
+    <div class="game-result" id="gameResult">
+        <div class="game-result-card">
+            <span class="trophy" id="resultTrophy"></span>
+            <h2 id="resultTitle"></h2>
+            <span class="stars-earned" id="resultStars"></span>
+            <p id="resultText"></p>
+            <button class="play-again-btn" onclick="restartGame()">Play Again</button>
+            <button class="play-again-btn secondary" onclick="goHome()">Home</button>
         </div>
     </div>
 
@@ -367,107 +570,224 @@
             english: {
                 title: 'English Letters',
                 color: '#60A5FA',
+                icon: '&#128292;',
+                cardClass: 'card-english',
                 items: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(c => ({
-                    char: c,
-                    name: c,
-                    speech: c,
-                    lang: 'en-US'
+                    char: c, name: c, speech: c, lang: 'en-US'
                 }))
             },
             arabic: {
                 title: 'Arabic Letters',
                 color: '#4ADE80',
+                icon: '&#128332;',
+                cardClass: 'card-arabic',
                 items: [
-                    { char: 'أ', name: 'ألف' }, { char: 'ب', name: 'باء' },
-                    { char: 'ت', name: 'تاء' }, { char: 'ث', name: 'ثاء' },
-                    { char: 'ج', name: 'جيم' }, { char: 'ح', name: 'حاء' },
-                    { char: 'خ', name: 'خاء' }, { char: 'د', name: 'دال' },
-                    { char: 'ذ', name: 'ذال' }, { char: 'ر', name: 'راء' },
-                    { char: 'ز', name: 'زاي' }, { char: 'س', name: 'سين' },
-                    { char: 'ش', name: 'شين' }, { char: 'ص', name: 'صاد' },
-                    { char: 'ض', name: 'ضاد' }, { char: 'ط', name: 'طاء' },
-                    { char: 'ظ', name: 'ظاء' }, { char: 'ع', name: 'عين' },
-                    { char: 'غ', name: 'غين' }, { char: 'ف', name: 'فاء' },
-                    { char: 'ق', name: 'قاف' }, { char: 'ك', name: 'كاف' },
-                    { char: 'ل', name: 'لام' }, { char: 'م', name: 'ميم' },
-                    { char: 'ن', name: 'نون' }, { char: 'ه', name: 'هاء' },
-                    { char: 'و', name: 'واو' }, { char: 'ي', name: 'ياء' },
+                    { char: '\u0623', name: '\u0623\u0644\u0641' }, { char: '\u0628', name: '\u0628\u0627\u0621' },
+                    { char: '\u062A', name: '\u062A\u0627\u0621' }, { char: '\u062B', name: '\u062B\u0627\u0621' },
+                    { char: '\u062C', name: '\u062C\u064A\u0645' }, { char: '\u062D', name: '\u062D\u0627\u0621' },
+                    { char: '\u062E', name: '\u062E\u0627\u0621' }, { char: '\u062F', name: '\u062F\u0627\u0644' },
+                    { char: '\u0630', name: '\u0630\u0627\u0644' }, { char: '\u0631', name: '\u0631\u0627\u0621' },
+                    { char: '\u0632', name: '\u0632\u0627\u064A' }, { char: '\u0633', name: '\u0633\u064A\u0646' },
+                    { char: '\u0634', name: '\u0634\u064A\u0646' }, { char: '\u0635', name: '\u0635\u0627\u062F' },
+                    { char: '\u0636', name: '\u0636\u0627\u062F' }, { char: '\u0637', name: '\u0637\u0627\u0621' },
+                    { char: '\u0638', name: '\u0638\u0627\u0621' }, { char: '\u0639', name: '\u0639\u064A\u0646' },
+                    { char: '\u063A', name: '\u063A\u064A\u0646' }, { char: '\u0641', name: '\u0641\u0627\u0621' },
+                    { char: '\u0642', name: '\u0642\u0627\u0641' }, { char: '\u0643', name: '\u0643\u0627\u0641' },
+                    { char: '\u0644', name: '\u0644\u0627\u0645' }, { char: '\u0645', name: '\u0645\u064A\u0645' },
+                    { char: '\u0646', name: '\u0646\u0648\u0646' }, { char: '\u0647', name: '\u0647\u0627\u0621' },
+                    { char: '\u0648', name: '\u0648\u0627\u0648' }, { char: '\u064A', name: '\u064A\u0627\u0621' },
                 ].map(i => ({ ...i, speech: i.name, lang: 'ar-SA' }))
             },
             numbers: {
                 title: 'Numbers',
                 color: '#FB923C',
+                icon: '&#128290;',
+                cardClass: 'card-numbers',
                 items: Array.from({ length: 20 }, (_, i) => ({
-                    char: String(i + 1),
-                    name: (i + 1).toString(),
-                    speech: String(i + 1),
-                    lang: 'en-US'
+                    char: String(i + 1), name: (i + 1).toString(),
+                    speech: String(i + 1), lang: 'en-US'
                 }))
             },
             shapes: {
                 title: 'Shapes',
                 color: '#C084FC',
+                icon: '&#128311;',
+                cardClass: 'card-shapes',
                 items: [
-                    { char: '●', name: 'Circle', svg: 'circle', shapeColor: '#60A5FA' },
-                    { char: '■', name: 'Square', svg: 'square', shapeColor: '#F87171' },
-                    { char: '▲', name: 'Triangle', svg: 'triangle', shapeColor: '#4ADE80' },
-                    { char: '⬟', name: 'Pentagon', svg: 'pentagon', shapeColor: '#FACC15' },
-                    { char: '⬡', name: 'Hexagon', svg: 'hexagon', shapeColor: '#FB923C' },
-                    { char: '⭐', name: 'Star', svg: 'star', shapeColor: '#FACC15' },
-                    { char: '💎', name: 'Diamond', svg: 'diamond', shapeColor: '#C084FC' },
-                    { char: '♥', name: 'Heart', svg: 'heart', shapeColor: '#FF6B9D' },
+                    { char: '\u25CF', name: 'Circle', shapeColor: '#60A5FA' },
+                    { char: '\u25A0', name: 'Square', shapeColor: '#F87171' },
+                    { char: '\u25B2', name: 'Triangle', shapeColor: '#4ADE80' },
+                    { char: '\u2B1F', name: 'Pentagon', shapeColor: '#FACC15' },
+                    { char: '\u2B21', name: 'Hexagon', shapeColor: '#FB923C' },
+                    { char: '\u2B50', name: 'Star', shapeColor: '#FACC15' },
+                    { char: '\uD83D\uDC8E', name: 'Diamond', shapeColor: '#C084FC' },
+                    { char: '\u2665', name: 'Heart', shapeColor: '#FF6B9D' },
                 ].map(i => ({ ...i, speech: i.name, lang: 'en-US' }))
             },
             arabicNumbers: {
-                title: 'الأرقام العربية',
+                title: '\u0627\u0644\u0623\u0631\u0642\u0627\u0645 \u0627\u0644\u0639\u0631\u0628\u064A\u0629',
                 color: '#F87171',
+                icon: '&#128290;',
+                cardClass: 'card-arabic-numbers',
                 items: [
-                    { char: '١', name: 'واحد' }, { char: '٢', name: 'اثنان' },
-                    { char: '٣', name: 'ثلاثة' }, { char: '٤', name: 'أربعة' },
-                    { char: '٥', name: 'خمسة' }, { char: '٦', name: 'ستة' },
-                    { char: '٧', name: 'سبعة' }, { char: '٨', name: 'ثمانية' },
-                    { char: '٩', name: 'تسعة' }, { char: '١٠', name: 'عشرة' },
-                    { char: '١١', name: 'أحد عشر' }, { char: '١٢', name: 'اثنا عشر' },
-                    { char: '١٣', name: 'ثلاثة عشر' }, { char: '١٤', name: 'أربعة عشر' },
-                    { char: '١٥', name: 'خمسة عشر' }, { char: '١٦', name: 'ستة عشر' },
-                    { char: '١٧', name: 'سبعة عشر' }, { char: '١٨', name: 'ثمانية عشر' },
-                    { char: '١٩', name: 'تسعة عشر' }, { char: '٢٠', name: 'عشرون' },
+                    { char: '\u0661', name: '\u0648\u0627\u062D\u062F' },
+                    { char: '\u0662', name: '\u0627\u062B\u0646\u0627\u0646' },
+                    { char: '\u0663', name: '\u062B\u0644\u0627\u062B\u0629' },
+                    { char: '\u0664', name: '\u0623\u0631\u0628\u0639\u0629' },
+                    { char: '\u0665', name: '\u062E\u0645\u0633\u0629' },
+                    { char: '\u0666', name: '\u0633\u062A\u0629' },
+                    { char: '\u0667', name: '\u0633\u0628\u0639\u0629' },
+                    { char: '\u0668', name: '\u062B\u0645\u0627\u0646\u064A\u0629' },
+                    { char: '\u0669', name: '\u062A\u0633\u0639\u0629' },
+                    { char: '\u0661\u0660', name: '\u0639\u0634\u0631\u0629' },
+                    { char: '\u0661\u0661', name: '\u0623\u062D\u062F \u0639\u0634\u0631' },
+                    { char: '\u0661\u0662', name: '\u0627\u062B\u0646\u0627 \u0639\u0634\u0631' },
+                    { char: '\u0661\u0663', name: '\u062B\u0644\u0627\u062B\u0629 \u0639\u0634\u0631' },
+                    { char: '\u0661\u0664', name: '\u0623\u0631\u0628\u0639\u0629 \u0639\u0634\u0631' },
+                    { char: '\u0661\u0665', name: '\u062E\u0645\u0633\u0629 \u0639\u0634\u0631' },
+                    { char: '\u0661\u0666', name: '\u0633\u062A\u0629 \u0639\u0634\u0631' },
+                    { char: '\u0661\u0667', name: '\u0633\u0628\u0639\u0629 \u0639\u0634\u0631' },
+                    { char: '\u0661\u0668', name: '\u062B\u0645\u0627\u0646\u064A\u0629 \u0639\u0634\u0631' },
+                    { char: '\u0661\u0669', name: '\u062A\u0633\u0639\u0629 \u0639\u0634\u0631' },
+                    { char: '\u0662\u0660', name: '\u0639\u0634\u0631\u0648\u0646' },
                 ].map(i => ({ ...i, speech: i.name, lang: 'ar-SA' }))
             },
             arabicShapes: {
-                title: 'الأشكال بالعربي',
+                title: '\u0627\u0644\u0623\u0634\u0643\u0627\u0644 \u0628\u0627\u0644\u0639\u0631\u0628\u064A',
                 color: '#FACC15',
+                icon: '&#128310;',
+                cardClass: 'card-arabic-shapes',
                 items: [
-                    { char: '●', name: 'دائرة', shapeColor: '#60A5FA' },
-                    { char: '■', name: 'مربع', shapeColor: '#F87171' },
-                    { char: '▲', name: 'مثلث', shapeColor: '#4ADE80' },
-                    { char: '⬟', name: 'خماسي', shapeColor: '#FACC15' },
-                    { char: '⬡', name: 'سداسي', shapeColor: '#FB923C' },
-                    { char: '⭐', name: 'نجمة', shapeColor: '#FACC15' },
-                    { char: '💎', name: 'معين', shapeColor: '#C084FC' },
-                    { char: '♥', name: 'قلب', shapeColor: '#FF6B9D' },
-                    { char: '⬭', name: 'بيضاوي', shapeColor: '#60A5FA' },
-                    { char: '▬', name: 'مستطيل', shapeColor: '#4ADE80' },
+                    { char: '\u25CF', name: '\u062F\u0627\u0626\u0631\u0629', shapeColor: '#60A5FA' },
+                    { char: '\u25A0', name: '\u0645\u0631\u0628\u0639', shapeColor: '#F87171' },
+                    { char: '\u25B2', name: '\u0645\u062B\u0644\u062B', shapeColor: '#4ADE80' },
+                    { char: '\u2B1F', name: '\u062E\u0645\u0627\u0633\u064A', shapeColor: '#FACC15' },
+                    { char: '\u2B21', name: '\u0633\u062F\u0627\u0633\u064A', shapeColor: '#FB923C' },
+                    { char: '\u2B50', name: '\u0646\u062C\u0645\u0629', shapeColor: '#FACC15' },
+                    { char: '\uD83D\uDC8E', name: '\u0645\u0639\u064A\u0646', shapeColor: '#C084FC' },
+                    { char: '\u2665', name: '\u0642\u0644\u0628', shapeColor: '#FF6B9D' },
+                    { char: '\u2B2D', name: '\u0628\u064A\u0636\u0627\u0648\u064A', shapeColor: '#60A5FA' },
+                    { char: '\u25AC', name: '\u0645\u0633\u062A\u0637\u064A\u0644', shapeColor: '#4ADE80' },
                 ].map(i => ({ ...i, speech: i.name, lang: 'ar-SA' }))
+            },
+            colors: {
+                title: 'Colors',
+                color: '#2DD4BF',
+                icon: '&#127912;',
+                cardClass: 'card-colors',
+                items: [
+                    { char: '\u2B24', name: 'Red', shapeColor: '#EF4444' },
+                    { char: '\u2B24', name: 'Blue', shapeColor: '#3B82F6' },
+                    { char: '\u2B24', name: 'Green', shapeColor: '#22C55E' },
+                    { char: '\u2B24', name: 'Yellow', shapeColor: '#EAB308' },
+                    { char: '\u2B24', name: 'Orange', shapeColor: '#F97316' },
+                    { char: '\u2B24', name: 'Purple', shapeColor: '#A855F7' },
+                    { char: '\u2B24', name: 'Pink', shapeColor: '#EC4899' },
+                    { char: '\u2B24', name: 'Brown', shapeColor: '#92400E' },
+                    { char: '\u2B24', name: 'Black', shapeColor: '#1F2937' },
+                    { char: '\u2B24', name: 'White', shapeColor: '#F9FAFB' },
+                ].map(i => ({ ...i, speech: i.name, lang: 'en-US', isColor: true }))
+            },
+            arabicColors: {
+                title: '\u0627\u0644\u0623\u0644\u0648\u0627\u0646',
+                color: '#F472B6',
+                icon: '&#127912;',
+                cardClass: 'card-arabic-colors',
+                items: [
+                    { char: '\u2B24', name: '\u0623\u062D\u0645\u0631', shapeColor: '#EF4444' },
+                    { char: '\u2B24', name: '\u0623\u0632\u0631\u0642', shapeColor: '#3B82F6' },
+                    { char: '\u2B24', name: '\u0623\u062E\u0636\u0631', shapeColor: '#22C55E' },
+                    { char: '\u2B24', name: '\u0623\u0635\u0641\u0631', shapeColor: '#EAB308' },
+                    { char: '\u2B24', name: '\u0628\u0631\u062A\u0642\u0627\u0644\u064A', shapeColor: '#F97316' },
+                    { char: '\u2B24', name: '\u0628\u0646\u0641\u0633\u062C\u064A', shapeColor: '#A855F7' },
+                    { char: '\u2B24', name: '\u0648\u0631\u062F\u064A', shapeColor: '#EC4899' },
+                    { char: '\u2B24', name: '\u0628\u0646\u064A', shapeColor: '#92400E' },
+                    { char: '\u2B24', name: '\u0623\u0633\u0648\u062F', shapeColor: '#1F2937' },
+                    { char: '\u2B24', name: '\u0623\u0628\u064A\u0636', shapeColor: '#F9FAFB' },
+                ].map(i => ({ ...i, speech: i.name, lang: 'ar-SA', isColor: true }))
             }
         };
 
+        const arabicCategories = ['arabic', 'arabicNumbers', 'arabicShapes', 'arabicColors'];
+        const shapeCategories = ['shapes', 'arabicShapes'];
+        const colorCategories = ['colors', 'arabicColors'];
+
+        let currentMode = 'learn';
         let currentCategory = null;
         let currentIndex = 0;
 
-        // ---- NAVIGATION ----
-        function startLesson(category) {
-            currentCategory = category;
-            currentIndex = 0;
-            document.getElementById('homeScreen').style.display = 'none';
-            document.getElementById('lessonScreen').style.display = 'flex';
-            showItem();
+        // ---- STARS ----
+        let totalStars = parseInt(localStorage.getItem('mariam-stars') || '0');
+
+        function updateStarDisplay() {
+            document.getElementById('starCount').textContent = totalStars;
+        }
+
+        function addStars(count) {
+            totalStars += count;
+            localStorage.setItem('mariam-stars', totalStars);
+            updateStarDisplay();
+            const el = document.getElementById('starCounter');
+            el.classList.remove('pop');
+            void el.offsetWidth;
+            el.classList.add('pop');
+
+            // Show big star
+            const star = document.createElement('div');
+            star.className = 'big-star-burst';
+            star.textContent = count >= 3 ? '\u2B50\u2B50\u2B50' : count >= 2 ? '\u2B50\u2B50' : '\u2B50';
+            document.body.appendChild(star);
+            setTimeout(() => star.remove(), 900);
+        }
+
+        updateStarDisplay();
+
+        // ---- MODE TOGGLE ----
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('modeLearn').classList.toggle('active', mode === 'learn');
+            document.getElementById('modeGame').classList.toggle('active', mode === 'game');
+            renderCategories();
+        }
+
+        // ---- RENDER HOME CATEGORIES ----
+        function renderCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = '';
+            const cats = Object.entries(data);
+            cats.forEach(([key, cat]) => {
+                const card = document.createElement('div');
+                card.className = `category-card ${cat.cardClass}`;
+                card.innerHTML = `<span class="icon">${cat.icon}</span><span class="label">${cat.title}</span>`;
+                card.onclick = () => {
+                    if (currentMode === 'learn') startLesson(key);
+                    else startGame(key);
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        renderCategories();
+
+        // ---- SCREEN MANAGEMENT ----
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
 
         function goHome() {
-            document.getElementById('homeScreen').style.display = 'flex';
-            document.getElementById('lessonScreen').style.display = 'none';
+            showScreen('homeScreen');
             currentCategory = null;
+            speechSynthesis.cancel();
+            document.getElementById('gameResult').classList.remove('active');
+        }
+
+        // ---- LESSON MODE ----
+        function startLesson(category) {
+            currentCategory = category;
+            currentIndex = 0;
+            showScreen('lessonScreen');
+            showItem();
         }
 
         function next() {
@@ -494,43 +814,201 @@
 
             const charEl = document.getElementById('displayChar');
             const nameEl = document.getElementById('displayName');
+            const visualEl = document.getElementById('displayVisual');
 
             charEl.className = 'display-char bounce-in';
+            nameEl.className = 'display-name';
             charEl.style.color = cat.color;
+            visualEl.innerHTML = '';
 
-            const isArabic = ['arabic', 'arabicNumbers', 'arabicShapes'].includes(currentCategory);
+            const isArabic = arabicCategories.includes(currentCategory);
             if (isArabic) {
-                charEl.classList.add('arabic');
-                nameEl.classList.add('arabic');
-            } else {
-                charEl.classList.remove('arabic');
-                nameEl.classList.remove('arabic');
+                charEl.classList.add('arabic-text');
+                nameEl.classList.add('arabic-text');
             }
 
-            if (currentCategory === 'shapes' || currentCategory === 'arabicShapes') {
+            // Color category: show a big colored circle
+            if (item.isColor) {
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch bounce-in';
+                swatch.style.background = item.shapeColor;
+                if (item.shapeColor === '#F9FAFB') {
+                    swatch.style.border = '4px solid #E5E7EB';
+                }
+                visualEl.appendChild(swatch);
+                charEl.textContent = '';
+                nameEl.textContent = item.name;
+                nameEl.style.fontSize = isArabic ? '2.5rem' : '2.2rem';
+            } else if (shapeCategories.includes(currentCategory)) {
                 charEl.style.fontSize = '10rem';
                 if (item.shapeColor) charEl.style.color = item.shapeColor;
+                charEl.textContent = item.char;
+                nameEl.textContent = item.name;
             } else {
                 charEl.style.fontSize = '12rem';
+                charEl.textContent = item.char;
+                nameEl.textContent = item.name;
             }
 
-            charEl.textContent = item.char;
-            nameEl.textContent = item.name;
-
-            // Auto-speak
             setTimeout(() => speakCurrent(), 300);
         }
 
-        // ---- SPEECH ----
         function speakCurrent() {
             if (!currentCategory) return;
             const item = data[currentCategory].items[currentIndex];
-            const utterance = new SpeechSynthesisUtterance(item.speech);
-            utterance.lang = item.lang;
+            speak(item.speech, item.lang);
+        }
+
+        function speak(text, lang) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
             utterance.rate = 0.8;
             utterance.pitch = 1.1;
             speechSynthesis.cancel();
             speechSynthesis.speak(utterance);
+        }
+
+        // ---- MATCH GAME ----
+        let gameItems = [];
+        let gameIndex = 0;
+        let gameCorrect = 0;
+        let gameTotal = 10;
+        let gameLocked = false;
+
+        function startGame(category) {
+            currentCategory = category;
+            const cat = data[category];
+            // Pick random items for the game
+            const shuffled = [...cat.items].sort(() => Math.random() - 0.5);
+            gameTotal = Math.min(10, cat.items.length);
+            gameItems = shuffled.slice(0, gameTotal);
+            gameIndex = 0;
+            gameCorrect = 0;
+            gameLocked = false;
+
+            document.getElementById('gameTitle').textContent = cat.title;
+            document.getElementById('gameTitle').style.color = cat.color;
+            showScreen('gameScreen');
+            showGameRound();
+        }
+
+        function showGameRound() {
+            if (gameIndex >= gameItems.length) {
+                showGameResult();
+                return;
+            }
+
+            gameLocked = false;
+            const cat = data[currentCategory];
+            const correct = gameItems[gameIndex];
+            const isArabic = arabicCategories.includes(currentCategory);
+
+            document.getElementById('gameScore').textContent =
+                `${gameIndex + 1} / ${gameTotal}`;
+
+            // Prompt text
+            const prompt = document.getElementById('gamePrompt');
+            if (isArabic) {
+                prompt.textContent = '\u0627\u0639\u062B\u0631 \u0639\u0644\u0649 \u0647\u0630\u0627!';
+                prompt.classList.add('arabic-text');
+            } else {
+                prompt.textContent = 'Find this one!';
+                prompt.classList.remove('arabic-text');
+            }
+
+            // Question display
+            const qEl = document.getElementById('gameQuestion');
+            qEl.className = 'game-question bounce-in';
+            if (isArabic) qEl.classList.add('arabic-text');
+
+            if (correct.isColor) {
+                qEl.innerHTML = `<div style="width:120px;height:120px;border-radius:50%;background:${correct.shapeColor};margin:0 auto;${correct.shapeColor === '#F9FAFB' ? 'border:4px solid #E5E7EB;' : ''}"></div>`;
+            } else {
+                qEl.textContent = correct.char;
+                qEl.style.color = correct.shapeColor || cat.color;
+            }
+
+            // Speak the name
+            setTimeout(() => speak(correct.speech, correct.lang), 300);
+
+            // Build 4 options: 1 correct + 3 wrong
+            const allItems = cat.items.filter(i => i.name !== correct.name);
+            const wrongItems = allItems.sort(() => Math.random() - 0.5).slice(0, 3);
+            const options = [correct, ...wrongItems].sort(() => Math.random() - 0.5);
+
+            const optionsEl = document.getElementById('gameOptions');
+            optionsEl.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'game-option';
+                if (isArabic) btn.classList.add('arabic-text');
+
+                if (opt.isColor) {
+                    btn.innerHTML = `<div style="font-size:1.8rem;font-weight:700;${isArabic ? "font-family:'Noto Naskh Arabic',serif;" : ''}">${opt.name}</div>`;
+                } else {
+                    btn.innerHTML = `<div style="color:${opt.shapeColor || cat.color}">${opt.char}</div>
+                        <div class="option-name ${isArabic ? 'arabic-text' : ''}">${opt.name}</div>`;
+                }
+
+                btn.onclick = () => handleAnswer(btn, opt, correct);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(btn, selected, correct) {
+            if (gameLocked) return;
+            gameLocked = true;
+
+            if (selected.name === correct.name) {
+                btn.classList.add('correct');
+                gameCorrect++;
+                addStars(1);
+                burstConfetti();
+                speak(correct.isColor ? correct.name : correct.speech, correct.lang);
+            } else {
+                btn.classList.add('wrong');
+                // Highlight the correct one
+                document.querySelectorAll('.game-option').forEach(el => {
+                    const nameInEl = el.querySelector('.option-name');
+                    const textInEl = el.textContent.trim();
+                    if (textInEl.includes(correct.name) || (nameInEl && nameInEl.textContent === correct.name)) {
+                        el.classList.add('correct');
+                    }
+                });
+            }
+
+            setTimeout(() => {
+                gameIndex++;
+                showGameRound();
+            }, 1200);
+        }
+
+        function showGameResult() {
+            const starsEarned = gameCorrect >= gameTotal ? 3 :
+                               gameCorrect >= gameTotal * 0.7 ? 2 :
+                               gameCorrect >= gameTotal * 0.4 ? 1 : 0;
+
+            if (starsEarned > 1) addStars(starsEarned - gameCorrect); // bonus stars
+
+            const resultEl = document.getElementById('gameResult');
+            document.getElementById('resultTrophy').textContent =
+                gameCorrect === gameTotal ? '\uD83C\uDFC6' : gameCorrect >= gameTotal * 0.7 ? '\uD83C\uDF89' : '\uD83D\uDCAA';
+            document.getElementById('resultTitle').textContent =
+                gameCorrect === gameTotal ? 'Perfect!' :
+                gameCorrect >= gameTotal * 0.7 ? 'Great Job!' : 'Keep Trying!';
+            document.getElementById('resultStars').textContent =
+                '\u2B50'.repeat(starsEarned) + '\u2606'.repeat(3 - starsEarned);
+            document.getElementById('resultText').textContent =
+                `${gameCorrect} out of ${gameTotal} correct!`;
+
+            resultEl.classList.add('active');
+            burstConfetti();
+            burstConfetti();
+        }
+
+        function restartGame() {
+            document.getElementById('gameResult').classList.remove('active');
+            startGame(currentCategory);
         }
 
         // ---- CONFETTI ----
@@ -551,14 +1029,13 @@
                 piece.style.animationDuration = (0.6 + Math.random() * 0.6) + 's';
                 container.appendChild(piece);
             }
-
             setTimeout(() => container.remove(), 1500);
         }
 
         // ---- FLOATING STARS ----
         function createStars() {
             const container = document.getElementById('stars');
-            const emojis = ['⭐', '🌟', '✨', '💫'];
+            const emojis = ['\u2B50', '\uD83C\uDF1F', '\u2728', '\uD83D\uDCAB'];
             for (let i = 0; i < 12; i++) {
                 const star = document.createElement('div');
                 star.className = 'floating-star';
@@ -573,10 +1050,11 @@
 
         // ---- KEYBOARD SUPPORT ----
         document.addEventListener('keydown', (e) => {
-            if (!currentCategory) return;
-            if (e.key === 'ArrowRight') next();
-            if (e.key === 'ArrowLeft') prev();
-            if (e.key === ' ') speakCurrent();
+            if (document.getElementById('lessonScreen').classList.contains('active')) {
+                if (e.key === 'ArrowRight') next();
+                if (e.key === 'ArrowLeft') prev();
+                if (e.key === ' ') speakCurrent();
+            }
             if (e.key === 'Escape') goHome();
         });
 
