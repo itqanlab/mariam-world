@@ -207,6 +207,74 @@
             font-weight: 700;
         }
 
+        /* Mode description */
+        .mode-description {
+            text-align: center;
+            margin-bottom: 25px;
+            max-width: 600px;
+        }
+
+        .mode-description .mode-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .mode-description .mode-name {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 3px;
+        }
+
+        .mode-description .mode-detail {
+            font-size: 1rem;
+            color: #9CA3AF;
+        }
+
+        /* Card badge */
+        .card-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Learn mode cards */
+        .mode-learn .category-card {
+            background: white;
+        }
+
+        .mode-learn .card-badge {
+            background: #EFF6FF;
+            color: var(--blue);
+        }
+
+        /* Match Game mode cards */
+        .mode-game .category-card {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FEF3C7 100%);
+            border-style: dashed;
+        }
+
+        .mode-game .card-badge {
+            background: #FEF3C7;
+            color: var(--orange);
+        }
+
+        /* Key Hunter mode cards */
+        .mode-hunter .category-card {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-width: 4px;
+        }
+
+        .mode-hunter .card-badge {
+            background: #D1FAE5;
+            color: #059669;
+        }
+
         .card-english { border-color: var(--blue); }
         .card-english .label { color: var(--blue); }
         .card-arabic { border-color: var(--green); }
@@ -980,6 +1048,7 @@
             <button class="mode-btn" id="modeHunter" onclick="setMode('hunter')">Key Hunter</button>
         </div>
 
+        <div class="mode-description" id="modeDescription"></div>
         <div class="categories" id="categoriesGrid"></div>
     </div>
 
@@ -1261,30 +1330,73 @@
         }
 
         // ---- RENDER HOME CATEGORIES ----
+        const modeConfig = {
+            learn: {
+                icon: '\uD83D\uDCD6',
+                name: 'Learn Mode',
+                detail: 'Explore letters, numbers, shapes & colors at your own pace',
+                badge: 'Learn',
+                badgeEmoji: '\uD83D\uDCD6'
+            },
+            game: {
+                icon: '\uD83C\uDFAF',
+                name: 'Match Game',
+                detail: 'Pick the right answer from 4 choices!',
+                badge: 'Quiz',
+                badgeEmoji: '\u2753'
+            },
+            hunter: {
+                icon: '\u2328\uFE0F',
+                name: 'Key Hunter',
+                detail: 'Find the letter on your keyboard!',
+                badge: 'Keyboard',
+                badgeEmoji: '\u2328\uFE0F'
+            }
+        };
+
         function renderCategories() {
             const grid = document.getElementById('categoriesGrid');
+            const descEl = document.getElementById('modeDescription');
             grid.innerHTML = '';
 
-            if (currentMode === 'hunter') {
-                // Key Hunter only works with letter categories
-                const hunterCats = { english: data.english, numbers: data.numbers };
-                Object.entries(hunterCats).forEach(([key, cat]) => {
-                    const card = document.createElement('div');
-                    card.className = `category-card ${cat.cardClass}`;
-                    card.innerHTML = `<span class="icon">${cat.icon}</span><span class="label">${cat.title}</span>`;
-                    card.onclick = () => startHunter(key);
-                    grid.appendChild(card);
-                });
-                return;
+            // Remove old mode classes, add current
+            grid.classList.remove('mode-learn', 'mode-game', 'mode-hunter');
+            grid.classList.add('mode-' + currentMode);
+
+            // Mode description
+            const mc = modeConfig[currentMode];
+            if (mc) {
+                descEl.innerHTML = `
+                    <span class="mode-icon">${mc.icon}</span>
+                    <div class="mode-name" style="color: ${currentMode === 'learn' ? 'var(--blue)' : currentMode === 'game' ? 'var(--orange)' : '#059669'}">${mc.name}</div>
+                    <div class="mode-detail">${mc.detail}</div>
+                `;
+            } else {
+                descEl.innerHTML = '';
             }
 
-            const cats = Object.entries(data);
+            let cats;
+            if (currentMode === 'hunter') {
+                cats = [['english', data.english], ['numbers', data.numbers]];
+            } else {
+                cats = Object.entries(data);
+            }
+
             cats.forEach(([key, cat]) => {
                 const card = document.createElement('div');
                 card.className = `category-card ${cat.cardClass}`;
-                card.innerHTML = `<span class="icon">${cat.icon}</span><span class="label">${cat.title}</span>`;
+
+                const badge = mc ? `<span class="card-badge">${mc.badgeEmoji} ${mc.badge}</span>` : '';
+
+                card.innerHTML = `
+                    <span class="icon">${cat.icon}</span>
+                    <span class="label">${cat.title}</span>
+                    ${badge}
+                `;
+
                 card.onclick = () => {
                     if (currentMode === 'learn') startLesson(key);
+                    else if (currentMode === 'hunter') startHunter(key);
                     else startGame(key);
                 };
                 grid.appendChild(card);
@@ -1304,9 +1416,12 @@
             currentCategory = null;
             pianoActive = false;
             hunterActive = false;
+            hunterCategory = null;
             clearTimeout(hunterHintTimer);
             speechSynthesis.cancel();
             document.getElementById('gameResult').classList.remove('active');
+            // Re-render categories for current mode
+            renderCategories();
         }
 
         // ---- LESSON MODE ----
@@ -1584,7 +1699,11 @@
 
         function startPiano() {
             pianoActive = true;
-            setMode('piano');
+            currentMode = 'piano';
+            document.getElementById('modeLearn').classList.remove('active');
+            document.getElementById('modeGame').classList.remove('active');
+            document.getElementById('modePiano').classList.add('active');
+            document.getElementById('modeHunter').classList.remove('active');
             showScreen('pianoScreen');
             audioCtx.resume();
         }
