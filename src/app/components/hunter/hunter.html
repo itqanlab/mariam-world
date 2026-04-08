@@ -1,0 +1,44 @@
+<div class="hunter-screen">
+  <div class="top-bar">
+    <button class="back-btn" (click)="goHome()">&larr;</button>
+    <span class="lesson-title" style="color: var(--green)">Key Hunter - {{ category.title }}</span>
+    <span class="game-score">{{ progress }}</span>
+  </div>
+
+  <p class="game-prompt">Find this key on the keyboard!</p>
+
+  @if (currentItem) {
+    <div class="hunter-target">
+      <div class="hunter-letter bounce-in" [style.color]="category.color">
+        {{ currentItem.char }}
+      </div>
+      <div class="hunter-label">
+        {{ categoryKey === 'numbers' ? currentItem.name : currentItem.char }}
+      </div>
+    </div>
+  }
+
+  <div class="hunter-hint">{{ hintText }}</div>
+  <div class="hunter-streak">{{ streakText }}</div>
+
+  <div class="hunter-keyboard-hint">
+    @for (hk of keys; track hk.key) {
+      <div class="hint-key"
+           [class.target]="hk.state === 'target'"
+           [class.correct]="hk.state === 'correct'"
+           [class.wrong]="hk.state === 'wrong'">
+        {{ hk.key }}
+      </div>
+    }
+  </div>
+</div>
+
+<app-game-result
+  [visible]="showResult"
+  [trophy]="resultTrophy"
+  [title]="resultTitle"
+  [starsDisplay]="resultStars"
+  [text]="resultText"
+  (playAgain)="startHunter()"
+  (goHome)="goHome()"
+/>

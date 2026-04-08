@@ -1,0 +1,31 @@
+<div class="home-screen">
+  <h1>Mariam's World</h1>
+  <p class="subtitle">Tap to start learning!</p>
+
+  <div class="mode-toggle">
+    <button class="mode-btn" [class.active]="currentMode === 'learn'" (click)="setMode('learn')">Learn</button>
+    <button class="mode-btn" [class.active]="currentMode === 'game'" (click)="setMode('game')">Match Game</button>
+    <button class="mode-btn" [class.active]="currentMode === 'piano'" (click)="startPiano()">Piano Keys</button>
+    <button class="mode-btn" [class.active]="currentMode === 'hunter'" (click)="setMode('hunter')">Key Hunter</button>
+  </div>
+
+  @if (modeConfig[currentMode]; as mc) {
+    <div class="mode-description">
+      <span class="mode-icon">{{ mc.icon }}</span>
+      <div class="mode-name" [style.color]="currentMode === 'learn' ? 'var(--blue)' : currentMode === 'game' ? 'var(--orange)' : '#059669'">{{ mc.name }}</div>
+      <div class="mode-detail">{{ mc.detail }}</div>
+    </div>
+  }
+
+  <div class="categories" [class]="'mode-' + currentMode">
+    @for (entry of categories; track entry.key) {
+      <div class="category-card" [class]="entry.cat.cardClass" (click)="onCategoryClick(entry.key)">
+        <span class="icon">{{ entry.cat.icon }}</span>
+        <span class="label">{{ entry.cat.title }}</span>
+        @if (modeConfig[currentMode]; as mc) {
+          <span class="card-badge">{{ mc.badgeEmoji }} {{ mc.badge }}</span>
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="lesson-screen">
+  <div class="top-bar">
+    <button class="back-btn" (click)="goHome()">&larr;</button>
+    <span class="lesson-title" [style.color]="category.color">{{ category.title }}</span>
+    <span class="progress-text">{{ progress }}</span>
+  </div>
+
+  <div class="display-card" (click)="speakCurrent()">
+    <!-- Color swatch -->
+    @if (item.isColor) {
+      <div class="color-swatch" [class]="entrance"
+           [style.background]="item.shapeColor"
+           [style.border]="item.shapeColor === '#F9FAFB' ? '4px solid #E5E7EB' : 'none'">
+      </div>
+      <div class="display-name" [class.arabic-text]="isArabic"
+           [style.fontSize]="isArabic ? '2.5rem' : '2.2rem'">
+        {{ item.name }}
+      </div>
+    }
+    <!-- Shape -->
+    @else if (isShape) {
+      <div class="display-char" [class]="entrance" [class.arabic-text]="isArabic"
+           [style.color]="item.shapeColor || category.color" style="font-size: 10rem;">
+        {{ item.char }}
+      </div>
+      <div class="display-name" [class.arabic-text]="isArabic">{{ item.name }}</div>
+    }
+    <!-- Letter with icon -->
+    @else if (hasLetterIcon) {
+      <div class="display-icon" [class]="entrance" [innerHTML]="iconHtml"></div>
+      <div class="display-char" [class]="entrance" [style.color]="category.color" style="font-size: 8rem;">
+        {{ item.char }}
+      </div>
+      <div class="display-name" [style.color]="category.color" style="font-size: 1.6rem; font-weight: 700;">
+        {{ item.name }}
+      </div>
+    }
+    <!-- Default -->
+    @else {
+      <div class="display-char" [class]="entrance" [class.arabic-text]="isArabic"
+           [style.color]="category.color" style="font-size: 12rem;">
+        {{ item.char }}
+      </div>
+      <div class="display-name" [class.arabic-text]="isArabic">{{ item.name }}</div>
+    }
+    <div class="tap-hint">Tap to hear!</div>
+  </div>
+
+  <div class="nav-arrows">
+    <button class="nav-btn" (click)="prev()">&#9664;</button>
+    <button class="nav-btn" (click)="next()">&#9654;</button>
+  </div>
+</div>
