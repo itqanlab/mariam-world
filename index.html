@@ -26,6 +26,10 @@
             background: var(--bg);
             min-height: 100vh;
             overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 20% 80%, rgba(192, 132, 252, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(96, 165, 250, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 107, 157, 0.05) 0%, transparent 50%);
         }
 
         .arabic-text {
@@ -49,6 +53,12 @@
             align-items: center;
             gap: 8px;
             transition: transform 0.3s;
+            animation: star-shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes star-shimmer {
+            0%, 100% { box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+            50% { box-shadow: 0 4px 25px rgba(250, 204, 21, 0.4), 0 0 15px rgba(251, 146, 60, 0.2); }
         }
 
         .star-counter.pop {
@@ -78,12 +88,31 @@
             color: var(--pink);
             text-shadow: 3px 3px 0 #FFD6E7;
             margin-bottom: 5px;
+            animation: title-rainbow 4s ease-in-out infinite, title-float 3s ease-in-out infinite;
+        }
+
+        @keyframes title-rainbow {
+            0%, 100% { color: var(--pink); text-shadow: 3px 3px 0 #FFD6E7; }
+            25% { color: var(--purple); text-shadow: 3px 3px 0 #E9D5FF; }
+            50% { color: var(--blue); text-shadow: 3px 3px 0 #BFDBFE; }
+            75% { color: var(--green); text-shadow: 3px 3px 0 #BBF7D0; }
+        }
+
+        @keyframes title-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         .home-screen .subtitle {
             font-size: 1.5rem;
             color: var(--purple);
             margin-bottom: 15px;
+            animation: subtitle-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes subtitle-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
         }
 
         /* Mode toggle */
@@ -130,19 +159,47 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.08);
             border: 4px solid transparent;
             user-select: none;
+            animation: card-float 3s ease-in-out infinite;
+        }
+
+        .category-card:nth-child(1) { animation-delay: 0s; }
+        .category-card:nth-child(2) { animation-delay: 0.3s; }
+        .category-card:nth-child(3) { animation-delay: 0.6s; }
+        .category-card:nth-child(4) { animation-delay: 0.9s; }
+        .category-card:nth-child(5) { animation-delay: 1.2s; }
+        .category-card:nth-child(6) { animation-delay: 1.5s; }
+        .category-card:nth-child(7) { animation-delay: 1.8s; }
+        .category-card:nth-child(8) { animation-delay: 2.1s; }
+
+        @keyframes card-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .category-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            transform: translateY(-8px) scale(1.08) rotate(-2deg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            animation: card-wiggle 0.5s ease-in-out infinite;
         }
 
-        .category-card:active { transform: scale(0.97); }
+        @keyframes card-wiggle {
+            0%, 100% { transform: translateY(-8px) scale(1.08) rotate(-2deg); }
+            50% { transform: translateY(-8px) scale(1.08) rotate(2deg); }
+        }
+
+        .category-card:active { transform: scale(0.93); }
 
         .category-card .icon {
             font-size: 3.5rem;
             margin-bottom: 12px;
             display: block;
+            animation: icon-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes icon-bounce {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.15) rotate(-5deg); }
+            75% { transform: scale(1.15) rotate(5deg); }
         }
 
         .category-card .label {
@@ -228,20 +285,72 @@
             overflow: hidden;
             cursor: pointer;
             transition: transform 0.2s;
+            animation: card-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes card-glow {
+            0%, 100% { box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+            50% { box-shadow: 0 10px 60px rgba(192, 132, 252, 0.2), 0 0 30px rgba(255, 107, 157, 0.1); }
         }
 
         .display-card:active { transform: scale(0.97); }
+
+        /* Sparkle ring around display card */
+        .display-card::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 44px;
+            background: conic-gradient(
+                var(--pink), var(--purple), var(--blue), var(--green),
+                var(--yellow), var(--orange), var(--red), var(--pink)
+            );
+            z-index: -1;
+            animation: spin-border 6s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes spin-border {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .display-card::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 38px;
+            background: white;
+            z-index: -1;
+        }
 
         .display-char {
             font-size: 12rem;
             line-height: 1;
             user-select: none;
+            animation: char-float 3s ease-in-out infinite, char-glow-text 2s ease-in-out infinite;
+        }
+
+        @keyframes char-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-12px) scale(1.03); }
+        }
+
+        @keyframes char-glow-text {
+            0%, 100% { filter: drop-shadow(0 0 0px transparent); }
+            50% { filter: drop-shadow(0 0 20px currentColor); }
         }
 
         .display-name {
             font-size: 2rem;
             color: #6B7280;
             margin-top: 10px;
+            animation: name-fade-float 3s ease-in-out infinite;
+        }
+
+        @keyframes name-fade-float {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(-5px); opacity: 0.8; }
         }
 
         .tap-hint {
@@ -249,6 +358,12 @@
             bottom: 20px;
             font-size: 1rem;
             color: #D1D5DB;
+            animation: hint-blink 2s ease-in-out infinite;
+        }
+
+        @keyframes hint-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         /* Color swatch for colors category */
@@ -258,6 +373,12 @@
             border-radius: 50%;
             margin-bottom: 15px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            animation: swatch-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes swatch-pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+            50% { transform: scale(1.08); box-shadow: 0 12px 50px rgba(0,0,0,0.25); }
         }
 
         .nav-arrows {
@@ -281,8 +402,20 @@
             user-select: none;
         }
 
-        .nav-btn:hover { border-color: var(--blue); color: var(--blue); }
-        .nav-btn:active { transform: scale(0.9); }
+        .nav-btn:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+            animation: nav-jelly 0.6s ease-in-out infinite;
+        }
+
+        @keyframes nav-jelly {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.15, 0.9); }
+            50% { transform: scale(0.9, 1.15); }
+            75% { transform: scale(1.05, 0.95); }
+        }
+
+        .nav-btn:active { transform: scale(0.85); }
 
         /* ---- MATCH GAME SCREEN ---- */
         .game-screen {
@@ -303,6 +436,13 @@
             line-height: 1;
             margin-bottom: 15px;
             user-select: none;
+            animation: game-q-wobble 2s ease-in-out infinite;
+        }
+
+        @keyframes game-q-wobble {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-3deg) scale(1.05); }
+            75% { transform: rotate(3deg) scale(1.05); }
         }
 
         .game-score {
@@ -332,14 +472,34 @@
             transition: all 0.2s;
             user-select: none;
             line-height: 1;
+            animation: option-pop-in 0.4s ease-out both;
+        }
+
+        .game-option:nth-child(1) { animation-delay: 0s; }
+        .game-option:nth-child(2) { animation-delay: 0.1s; }
+        .game-option:nth-child(3) { animation-delay: 0.2s; }
+        .game-option:nth-child(4) { animation-delay: 0.3s; }
+
+        @keyframes option-pop-in {
+            0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         .game-option:hover {
             border-color: var(--blue);
-            transform: scale(1.05);
+            transform: scale(1.08);
+            box-shadow: 0 8px 25px rgba(96, 165, 250, 0.2);
+            animation: option-hover-wobble 0.6s ease-in-out infinite;
         }
 
-        .game-option:active { transform: scale(0.95); }
+        @keyframes option-hover-wobble {
+            0%, 100% { transform: scale(1.08) rotate(0deg); }
+            25% { transform: scale(1.08) rotate(-3deg); }
+            75% { transform: scale(1.08) rotate(3deg); }
+        }
+
+        .game-option:active { transform: scale(0.92); }
 
         .game-option.correct {
             border-color: var(--green);
@@ -396,7 +556,23 @@
             animation: bounce-in 0.5s ease-out;
         }
 
-        .game-result-card .trophy { font-size: 5rem; margin-bottom: 15px; display: block; }
+        .game-result-card .trophy {
+            font-size: 5rem;
+            margin-bottom: 15px;
+            display: block;
+            animation: trophy-spin 1s ease-out, trophy-float 2s ease-in-out 1s infinite;
+        }
+
+        @keyframes trophy-spin {
+            0% { transform: rotateY(0deg) scale(0); }
+            60% { transform: rotateY(360deg) scale(1.2); }
+            100% { transform: rotateY(360deg) scale(1); }
+        }
+
+        @keyframes trophy-float {
+            0%, 100% { transform: translateY(0) rotate(-3deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+        }
         .game-result-card h2 { font-size: 2rem; color: var(--pink); margin-bottom: 10px; }
         .game-result-card p { font-size: 1.3rem; color: #6B7280; margin-bottom: 25px; }
 
@@ -404,6 +580,12 @@
             font-size: 3rem;
             margin-bottom: 20px;
             display: block;
+            animation: stars-twinkle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes stars-twinkle {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.1); filter: brightness(1.3); }
         }
 
         .play-again-btn {
@@ -420,7 +602,16 @@
             margin: 5px;
         }
 
-        .play-again-btn:hover { transform: scale(1.05); }
+        .play-again-btn {
+            animation: btn-breathe 2s ease-in-out infinite;
+        }
+
+        @keyframes btn-breathe {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 25px rgba(255, 107, 157, 0.5); }
+        }
+
+        .play-again-btn:hover { transform: scale(1.1); animation: none; }
         .play-again-btn.secondary {
             background: white;
             color: var(--pink);
@@ -432,15 +623,14 @@
 
         .confetti-piece {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            border-radius: 2px;
-            animation: confetti-fall 1s ease-out forwards;
+            border-radius: 3px;
+            animation: confetti-fall-spin ease-out forwards;
         }
 
-        @keyframes confetti-fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(200px) rotate(720deg); opacity: 0; }
+        @keyframes confetti-fall-spin {
+            0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 1; }
+            50% { opacity: 1; }
+            100% { transform: translateY(var(--fall-y, 300px)) translateX(var(--drift-x, 0px)) rotate(var(--spin, 720deg)) scale(0.3); opacity: 0; }
         }
 
         @keyframes bounce-in {
@@ -451,6 +641,36 @@
         }
 
         .bounce-in { animation: bounce-in 0.5s ease-out; }
+
+        /* Slide in from sides */
+        .slide-in-left {
+            animation: slide-left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes slide-left {
+            0% { transform: translateX(-100%) rotate(-20deg); opacity: 0; }
+            100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+        }
+
+        .slide-in-right {
+            animation: slide-right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes slide-right {
+            0% { transform: translateX(100%) rotate(20deg); opacity: 0; }
+            100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+        }
+
+        /* Flip entrance */
+        .flip-in {
+            animation: flip-in 0.6s ease-out both;
+        }
+
+        @keyframes flip-in {
+            0% { transform: perspective(600px) rotateY(-90deg); opacity: 0; }
+            60% { transform: perspective(600px) rotateY(15deg); }
+            100% { transform: perspective(600px) rotateY(0deg); opacity: 1; }
+        }
 
         /* Stars background */
         .stars-container {
@@ -463,15 +683,53 @@
 
         .floating-star {
             position: absolute;
-            opacity: 0.15;
-            animation: float-around 20s infinite ease-in-out;
+            animation: float-around 15s infinite ease-in-out;
         }
 
         @keyframes float-around {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            25% { transform: translateY(-30px) rotate(90deg); }
-            50% { transform: translateY(10px) rotate(180deg); }
-            75% { transform: translateY(-20px) rotate(270deg); }
+            0% { transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); opacity: 0.2; }
+            25% { transform: translateY(-40px) translateX(20px) rotate(90deg) scale(1.2); opacity: 0.35; }
+            50% { transform: translateY(10px) translateX(-15px) rotate(180deg) scale(0.9); opacity: 0.15; }
+            75% { transform: translateY(-25px) translateX(10px) rotate(270deg) scale(1.1); opacity: 0.3; }
+            100% { transform: translateY(0px) translateX(0px) rotate(360deg) scale(1); opacity: 0.2; }
+        }
+
+        /* Bubble particles */
+        .bubble-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            border-radius: 50%;
+            opacity: 0;
+            animation: bubble-rise linear infinite;
+        }
+
+        @keyframes bubble-rise {
+            0% { transform: translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 0.15; transform: translateX(0) scale(1); }
+            90% { opacity: 0.1; }
+            100% { transform: translateX(calc(var(--drift) * 1px)) scale(0.5); opacity: 0; bottom: 110vh; }
+        }
+
+        /* Rainbow wave on mode buttons */
+        .mode-btn.active {
+            border-color: var(--pink);
+            background: var(--pink);
+            color: white;
+            animation: mode-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes mode-glow {
+            0%, 100% { box-shadow: 0 0 0px var(--pink); }
+            50% { box-shadow: 0 0 20px var(--pink), 0 0 40px rgba(255, 107, 157, 0.3); }
         }
 
         /* Big star burst for game correct */
@@ -573,7 +831,7 @@
                 icon: '&#128292;',
                 cardClass: 'card-english',
                 items: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(c => ({
-                    char: c, name: c, speech: c, lang: 'en-US'
+                    char: c, name: c, speech: c.toLowerCase(), lang: 'en-US'
                 }))
             },
             arabic: {
@@ -816,7 +1074,11 @@
             const nameEl = document.getElementById('displayName');
             const visualEl = document.getElementById('displayVisual');
 
-            charEl.className = 'display-char bounce-in';
+            // Pick a random entrance animation
+            const entrances = ['bounce-in', 'flip-in', 'slide-in-left', 'slide-in-right'];
+            const entrance = entrances[Math.floor(Math.random() * entrances.length)];
+
+            charEl.className = `display-char ${entrance}`;
             nameEl.className = 'display-name';
             charEl.style.color = cat.color;
             visualEl.innerHTML = '';
@@ -830,7 +1092,7 @@
             // Color category: show a big colored circle
             if (item.isColor) {
                 const swatch = document.createElement('div');
-                swatch.className = 'color-swatch bounce-in';
+                swatch.className = `color-swatch ${entrance}`;
                 swatch.style.background = item.shapeColor;
                 if (item.shapeColor === '#F9FAFB') {
                     swatch.style.border = '4px solid #E5E7EB';
@@ -1013,39 +1275,82 @@
 
         // ---- CONFETTI ----
         function burstConfetti() {
-            const colors = ['#FF6B9D', '#C084FC', '#60A5FA', '#4ADE80', '#FACC15', '#FB923C'];
+            const colors = ['#FF6B9D', '#C084FC', '#60A5FA', '#4ADE80', '#FACC15', '#FB923C', '#F87171'];
+            const shapes = ['circle', 'rect', 'star'];
             const container = document.createElement('div');
             container.className = 'confetti';
             container.style.left = '50%';
-            container.style.top = '40%';
+            container.style.top = '35%';
             document.body.appendChild(container);
 
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 35; i++) {
                 const piece = document.createElement('div');
                 piece.className = 'confetti-piece';
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                const size = 6 + Math.random() * 12;
+                piece.style.width = size + 'px';
+                piece.style.height = shape === 'circle' ? size + 'px' : size * 0.6 + 'px';
+                piece.style.borderRadius = shape === 'circle' ? '50%' : '2px';
                 piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-                piece.style.left = (Math.random() - 0.5) * 300 + 'px';
-                piece.style.animationDelay = Math.random() * 0.3 + 's';
-                piece.style.animationDuration = (0.6 + Math.random() * 0.6) + 's';
+                piece.style.left = (Math.random() - 0.5) * 500 + 'px';
+                piece.style.setProperty('--fall-y', (200 + Math.random() * 200) + 'px');
+                piece.style.setProperty('--drift-x', (Math.random() - 0.5) * 200 + 'px');
+                piece.style.setProperty('--spin', (360 + Math.random() * 720) + 'deg');
+                piece.style.animationDelay = Math.random() * 0.4 + 's';
+                piece.style.animationDuration = (0.8 + Math.random() * 0.8) + 's';
                 container.appendChild(piece);
             }
-            setTimeout(() => container.remove(), 1500);
+            setTimeout(() => container.remove(), 2000);
         }
 
         // ---- FLOATING STARS ----
         function createStars() {
             const container = document.getElementById('stars');
-            const emojis = ['\u2B50', '\uD83C\uDF1F', '\u2728', '\uD83D\uDCAB'];
-            for (let i = 0; i < 12; i++) {
+            const emojis = ['\u2B50', '\uD83C\uDF1F', '\u2728', '\uD83D\uDCAB', '\uD83C\uDF08', '\u2764\uFE0F', '\uD83E\uDD8B'];
+            for (let i = 0; i < 20; i++) {
                 const star = document.createElement('div');
                 star.className = 'floating-star';
                 star.textContent = emojis[i % emojis.length];
-                star.style.fontSize = (20 + Math.random() * 30) + 'px';
+                star.style.fontSize = (18 + Math.random() * 35) + 'px';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = -(Math.random() * 20) + 's';
+                star.style.animationDelay = -(Math.random() * 15) + 's';
+                star.style.animationDuration = (10 + Math.random() * 15) + 's';
                 container.appendChild(star);
             }
+        }
+
+        // ---- BUBBLE PARTICLES ----
+        function createBubbles() {
+            const container = document.createElement('div');
+            container.className = 'bubble-container';
+            document.body.appendChild(container);
+
+            const colors = ['rgba(255,107,157,0.2)', 'rgba(192,132,252,0.2)', 'rgba(96,165,250,0.2)',
+                           'rgba(74,222,128,0.2)', 'rgba(250,204,21,0.2)', 'rgba(251,146,60,0.2)'];
+
+            function spawnBubble() {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = 15 + Math.random() * 40;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+                bubble.style.setProperty('--drift', (Math.random() - 0.5) * 200);
+                bubble.style.animationDuration = (8 + Math.random() * 12) + 's';
+                container.appendChild(bubble);
+
+                setTimeout(() => bubble.remove(), 20000);
+            }
+
+            // Spawn initial batch
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => spawnBubble(), i * 500);
+            }
+
+            // Keep spawning
+            setInterval(spawnBubble, 2000);
         }
 
         // ---- KEYBOARD SUPPORT ----
@@ -1059,6 +1364,7 @@
         });
 
         createStars();
+        createBubbles();
     </script>
 </body>
 </html>
