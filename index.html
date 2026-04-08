@@ -732,6 +732,212 @@
             50% { box-shadow: 0 0 20px var(--pink), 0 0 40px rgba(255, 107, 157, 0.3); }
         }
 
+        /* ---- PIANO KEYS SCREEN ---- */
+        .piano-screen {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .piano-prompt {
+            font-size: 1.8rem;
+            color: #9CA3AF;
+            margin-bottom: 20px;
+            animation: subtitle-pulse 2s ease-in-out infinite;
+        }
+
+        .piano-display {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .piano-letter {
+            font-size: 16rem;
+            line-height: 1;
+            position: absolute;
+            animation: piano-letter-burst 1.2s ease-out forwards;
+            pointer-events: none;
+            user-select: none;
+            font-weight: 800;
+        }
+
+        @keyframes piano-letter-burst {
+            0% { transform: scale(0) rotate(-20deg); opacity: 1; }
+            30% { transform: scale(1.3) rotate(5deg); opacity: 1; }
+            60% { transform: scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: scale(0.8) translateY(-40px); opacity: 0; }
+        }
+
+        .piano-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 50;
+            font-size: 2rem;
+            animation: trail-float 1.5s ease-out forwards;
+        }
+
+        @keyframes trail-float {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+        }
+
+        .piano-color-flash {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            animation: color-flash 0.4s ease-out forwards;
+        }
+
+        @keyframes color-flash {
+            0% { opacity: 0.15; }
+            100% { opacity: 0; }
+        }
+
+        .piano-ripple {
+            position: absolute;
+            border-radius: 50%;
+            border: 4px solid;
+            animation: ripple-out 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-out {
+            0% { width: 0; height: 0; opacity: 0.6; }
+            100% { width: 400px; height: 400px; margin: -200px; opacity: 0; }
+        }
+
+        /* ---- KEY HUNTER SCREEN ---- */
+        .hunter-screen {
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .hunter-target {
+            background: white;
+            border-radius: 50%;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            position: relative;
+            animation: target-breathe 2s ease-in-out infinite;
+        }
+
+        @keyframes target-breathe {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 50px rgba(0,0,0,0.1); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 60px rgba(0,0,0,0.15); }
+        }
+
+        .hunter-target::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            background: conic-gradient(var(--pink), var(--purple), var(--blue), var(--green), var(--yellow), var(--orange), var(--pink));
+            z-index: -1;
+            animation: spin-border 4s linear infinite;
+        }
+
+        .hunter-target::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 50%;
+            background: white;
+            z-index: -1;
+        }
+
+        .hunter-letter {
+            font-size: 10rem;
+            line-height: 1;
+            user-select: none;
+            animation: char-float 3s ease-in-out infinite, char-glow-text 2s ease-in-out infinite;
+        }
+
+        .hunter-label {
+            font-size: 1.4rem;
+            color: #9CA3AF;
+            margin-top: 5px;
+        }
+
+        .hunter-hint {
+            font-size: 1.3rem;
+            color: #D1D5DB;
+            margin: 15px 0;
+            min-height: 2rem;
+            animation: hint-blink 2s ease-in-out infinite;
+        }
+
+        .hunter-keyboard-hint {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            max-width: 600px;
+            margin-top: 10px;
+        }
+
+        .hint-key {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: white;
+            border: 3px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #9CA3AF;
+            transition: all 0.3s;
+        }
+
+        .hint-key.target {
+            animation: key-hint-glow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes key-hint-glow {
+            0%, 100% { border-color: #E5E7EB; background: white; transform: scale(1); }
+            50% { border-color: var(--green); background: #ECFDF5; transform: scale(1.15); }
+        }
+
+        .hint-key.correct {
+            border-color: var(--green);
+            background: #ECFDF5;
+            color: var(--green);
+            animation: shake-yes 0.5s ease-out;
+        }
+
+        .hint-key.wrong {
+            border-color: var(--red);
+            background: #FEF2F2;
+            color: var(--red);
+            animation: shake-no 0.4s ease-out;
+        }
+
+        .hunter-streak {
+            font-size: 1.2rem;
+            color: var(--orange);
+            font-weight: 700;
+            margin-top: 10px;
+            min-height: 1.5rem;
+        }
+
         /* Big star burst for game correct */
         .big-star-burst {
             position: fixed;
@@ -770,6 +976,8 @@
         <div class="mode-toggle">
             <button class="mode-btn active" id="modeLearn" onclick="setMode('learn')">Learn</button>
             <button class="mode-btn" id="modeGame" onclick="setMode('game')">Match Game</button>
+            <button class="mode-btn" id="modePiano" onclick="startPiano()">Piano Keys</button>
+            <button class="mode-btn" id="modeHunter" onclick="setMode('hunter')">Key Hunter</button>
         </div>
 
         <div class="categories" id="categoriesGrid"></div>
@@ -820,6 +1028,34 @@
             <button class="play-again-btn" onclick="restartGame()">Play Again</button>
             <button class="play-again-btn secondary" onclick="goHome()">Home</button>
         </div>
+    </div>
+
+    <!-- PIANO KEYS SCREEN -->
+    <div class="screen piano-screen" id="pianoScreen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()">&#8592;</button>
+            <span class="lesson-title" style="color: var(--purple)">Piano Keys</span>
+            <span></span>
+        </div>
+        <p class="piano-prompt">Press any key!</p>
+        <div class="piano-display" id="pianoDisplay"></div>
+    </div>
+
+    <!-- KEY HUNTER SCREEN -->
+    <div class="screen hunter-screen" id="hunterScreen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()">&#8592;</button>
+            <span class="lesson-title" id="hunterTitle" style="color: var(--green)">Key Hunter</span>
+            <span class="game-score" id="hunterScore"></span>
+        </div>
+        <p class="game-prompt" id="hunterPrompt">Find this key!</p>
+        <div class="hunter-target" id="hunterTarget">
+            <div class="hunter-letter" id="hunterLetter"></div>
+            <div class="hunter-label" id="hunterLabel"></div>
+        </div>
+        <div class="hunter-hint" id="hunterHint"></div>
+        <div class="hunter-streak" id="hunterStreak"></div>
+        <div class="hunter-keyboard-hint" id="hunterKeyboard"></div>
     </div>
 
     <script>
@@ -1019,6 +1255,8 @@
             currentMode = mode;
             document.getElementById('modeLearn').classList.toggle('active', mode === 'learn');
             document.getElementById('modeGame').classList.toggle('active', mode === 'game');
+            document.getElementById('modePiano').classList.toggle('active', mode === 'piano');
+            document.getElementById('modeHunter').classList.toggle('active', mode === 'hunter');
             renderCategories();
         }
 
@@ -1026,6 +1264,20 @@
         function renderCategories() {
             const grid = document.getElementById('categoriesGrid');
             grid.innerHTML = '';
+
+            if (currentMode === 'hunter') {
+                // Key Hunter only works with letter categories
+                const hunterCats = { english: data.english, numbers: data.numbers };
+                Object.entries(hunterCats).forEach(([key, cat]) => {
+                    const card = document.createElement('div');
+                    card.className = `category-card ${cat.cardClass}`;
+                    card.innerHTML = `<span class="icon">${cat.icon}</span><span class="label">${cat.title}</span>`;
+                    card.onclick = () => startHunter(key);
+                    grid.appendChild(card);
+                });
+                return;
+            }
+
             const cats = Object.entries(data);
             cats.forEach(([key, cat]) => {
                 const card = document.createElement('div');
@@ -1050,6 +1302,9 @@
         function goHome() {
             showScreen('homeScreen');
             currentCategory = null;
+            pianoActive = false;
+            hunterActive = false;
+            clearTimeout(hunterHintTimer);
             speechSynthesis.cancel();
             document.getElementById('gameResult').classList.remove('active');
         }
@@ -1284,7 +1539,262 @@
 
         function restartGame() {
             document.getElementById('gameResult').classList.remove('active');
-            startGame(currentCategory);
+            if (hunterCategory && !currentCategory) {
+                startHunter(hunterCategory);
+            } else if (currentCategory) {
+                startGame(currentCategory);
+            }
+        }
+
+        // ---- PIANO KEYS ----
+        const pianoColors = [
+            '#FF6B9D', '#C084FC', '#60A5FA', '#4ADE80', '#FACC15',
+            '#FB923C', '#F87171', '#2DD4BF', '#A78BFA', '#F472B6',
+            '#34D399', '#FBBF24', '#F97316', '#EC4899', '#8B5CF6'
+        ];
+
+        // Simple musical notes using Web Audio
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playNote(frequency, duration) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.value = frequency;
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Map keys to frequencies (musical scale)
+        const keyNotes = {};
+        const baseNotes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25,
+                          587.33, 659.25, 698.46, 783.99, 880.00, 987.77, 1046.50];
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((c, i) => {
+            keyNotes[c] = baseNotes[i % baseNotes.length];
+        });
+        '0123456789'.split('').forEach((c, i) => {
+            keyNotes[c] = baseNotes[i % baseNotes.length] * 1.5;
+        });
+
+        let pianoActive = false;
+
+        function startPiano() {
+            pianoActive = true;
+            setMode('piano');
+            showScreen('pianoScreen');
+            audioCtx.resume();
+        }
+
+        function handlePianoKey(e) {
+            if (!pianoActive) return;
+            const key = e.key.toUpperCase();
+            if (!key.match(/^[A-Z0-9]$/)) return;
+
+            const display = document.getElementById('pianoDisplay');
+            const color = pianoColors[Math.floor(Math.random() * pianoColors.length)];
+
+            // Play note
+            const freq = keyNotes[key] || 440;
+            playNote(freq, 0.5);
+
+            // Speak the letter
+            speak(key.toLowerCase(), 'en-US');
+
+            // Big letter burst
+            const letter = document.createElement('div');
+            letter.className = 'piano-letter bounce-in';
+            letter.textContent = key;
+            letter.style.color = color;
+            letter.style.animation = 'piano-letter-burst 1.2s ease-out forwards';
+            display.appendChild(letter);
+            setTimeout(() => letter.remove(), 1300);
+
+            // Ripple effect
+            const ripple = document.createElement('div');
+            ripple.className = 'piano-ripple';
+            ripple.style.borderColor = color;
+            ripple.style.left = '50%';
+            ripple.style.top = '50%';
+            display.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 1000);
+
+            // Color flash on screen
+            const flash = document.createElement('div');
+            flash.className = 'piano-color-flash';
+            flash.style.background = color;
+            document.body.appendChild(flash);
+            setTimeout(() => flash.remove(), 400);
+
+            // Floating trail letters
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const trail = document.createElement('div');
+                    trail.className = 'piano-trail';
+                    trail.textContent = key;
+                    trail.style.color = pianoColors[Math.floor(Math.random() * pianoColors.length)];
+                    trail.style.left = (20 + Math.random() * 60) + '%';
+                    trail.style.top = (30 + Math.random() * 40) + '%';
+                    trail.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+                    document.body.appendChild(trail);
+                    setTimeout(() => trail.remove(), 1500);
+                }, i * 80);
+            }
+
+            // Mini confetti
+            burstConfetti();
+        }
+
+        // ---- KEY HUNTER ----
+        let hunterActive = false;
+        let hunterItems = [];
+        let hunterIndex = 0;
+        let hunterCorrect = 0;
+        let hunterTotal = 10;
+        let hunterStreak = 0;
+        let hunterHintTimer = null;
+        let hunterCategory = null;
+
+        function startHunter(category) {
+            hunterCategory = category;
+            hunterActive = true;
+            const cat = data[category];
+            const pool = category === 'numbers'
+                ? cat.items.slice(0, 9) // 1-9 for keyboard
+                : cat.items;
+            const shuffled = [...pool].sort(() => Math.random() - 0.5);
+            hunterTotal = Math.min(10, pool.length);
+            hunterItems = shuffled.slice(0, hunterTotal);
+            hunterIndex = 0;
+            hunterCorrect = 0;
+            hunterStreak = 0;
+
+            document.getElementById('hunterTitle').textContent = 'Key Hunter - ' + cat.title;
+            showScreen('hunterScreen');
+            showHunterRound();
+        }
+
+        function showHunterRound() {
+            if (hunterIndex >= hunterItems.length) {
+                hunterActive = false;
+                showHunterResult();
+                return;
+            }
+
+            const item = hunterItems[hunterIndex];
+            const color = data[hunterCategory].color;
+
+            document.getElementById('hunterScore').textContent =
+                `${hunterIndex + 1} / ${hunterTotal}`;
+            document.getElementById('hunterPrompt').textContent = 'Find this key on the keyboard!';
+
+            const letterEl = document.getElementById('hunterLetter');
+            letterEl.textContent = item.char;
+            letterEl.style.color = color;
+            letterEl.className = 'hunter-letter bounce-in';
+
+            document.getElementById('hunterLabel').textContent =
+                hunterCategory === 'numbers' ? item.name : item.char;
+            document.getElementById('hunterHint').textContent = '';
+            document.getElementById('hunterStreak').textContent =
+                hunterStreak >= 2 ? '\u2B50'.repeat(Math.min(hunterStreak, 5)) + ' Streak: ' + hunterStreak + '!' : '';
+
+            // Speak
+            setTimeout(() => speak(item.speech, item.lang), 300);
+
+            // Build keyboard hint display
+            const kbEl = document.getElementById('hunterKeyboard');
+            kbEl.innerHTML = '';
+            const keys = hunterCategory === 'numbers'
+                ? '123456789'.split('')
+                : 'QWERTYUIOPASDFGHJKLZXCVBNM'.split('');
+
+            keys.forEach(k => {
+                const keyEl = document.createElement('div');
+                keyEl.className = 'hint-key';
+                keyEl.textContent = k;
+                keyEl.dataset.key = k;
+                if (k === item.char) {
+                    // Show hint after delay
+                    hunterHintTimer = setTimeout(() => {
+                        keyEl.classList.add('target');
+                        document.getElementById('hunterHint').textContent = 'Look for the glowing key!';
+                    }, 5000);
+                }
+                kbEl.appendChild(keyEl);
+            });
+        }
+
+        function handleHunterKey(e) {
+            if (!hunterActive) return;
+            const key = e.key.toUpperCase();
+            const item = hunterItems[hunterIndex];
+            const targetKey = item.char.toUpperCase();
+
+            clearTimeout(hunterHintTimer);
+
+            // Find the visual key
+            const allKeys = document.querySelectorAll('.hint-key');
+
+            if (key === targetKey) {
+                // Correct!
+                hunterCorrect++;
+                hunterStreak++;
+                const stars = hunterStreak >= 3 ? 2 : 1;
+                addStars(stars);
+                burstConfetti();
+                speak(item.speech, item.lang);
+
+                allKeys.forEach(k => {
+                    if (k.dataset.key === targetKey) k.classList.add('correct');
+                });
+
+                document.getElementById('hunterHint').textContent = '';
+                document.getElementById('hunterStreak').textContent =
+                    hunterStreak >= 2 ? '\u2B50'.repeat(Math.min(hunterStreak, 5)) + ' Streak: ' + hunterStreak + '!' : '';
+
+                setTimeout(() => {
+                    hunterIndex++;
+                    showHunterRound();
+                }, 1000);
+            } else {
+                // Wrong key
+                hunterStreak = 0;
+                allKeys.forEach(k => {
+                    if (k.dataset.key === key) k.classList.add('wrong');
+                });
+                document.getElementById('hunterHint').textContent = 'Try again! Look at the letter...';
+
+                // Remove wrong class after animation
+                setTimeout(() => {
+                    allKeys.forEach(k => k.classList.remove('wrong'));
+                }, 500);
+            }
+        }
+
+        function showHunterResult() {
+            const starsEarned = hunterCorrect >= hunterTotal ? 3 :
+                               hunterCorrect >= hunterTotal * 0.7 ? 2 :
+                               hunterCorrect >= hunterTotal * 0.4 ? 1 : 0;
+            if (starsEarned > 0) addStars(starsEarned);
+
+            const resultEl = document.getElementById('gameResult');
+            document.getElementById('resultTrophy').textContent =
+                hunterCorrect === hunterTotal ? '\uD83C\uDFC6' : hunterCorrect >= hunterTotal * 0.7 ? '\uD83C\uDF89' : '\uD83D\uDCAA';
+            document.getElementById('resultTitle').textContent =
+                hunterCorrect === hunterTotal ? 'Keyboard Master!' :
+                hunterCorrect >= hunterTotal * 0.7 ? 'Great Typing!' : 'Keep Practicing!';
+            document.getElementById('resultStars').textContent =
+                '\u2B50'.repeat(starsEarned) + '\u2606'.repeat(3 - starsEarned);
+            document.getElementById('resultText').textContent =
+                `${hunterCorrect} out of ${hunterTotal} keys found!`;
+
+            resultEl.classList.add('active');
+            burstConfetti();
+            burstConfetti();
         }
 
         // ---- CONFETTI ----
@@ -1369,6 +1879,16 @@
 
         // ---- KEYBOARD SUPPORT ----
         document.addEventListener('keydown', (e) => {
+            if (document.getElementById('pianoScreen').classList.contains('active')) {
+                handlePianoKey(e);
+                if (e.key === 'Escape') goHome();
+                return;
+            }
+            if (document.getElementById('hunterScreen').classList.contains('active')) {
+                handleHunterKey(e);
+                if (e.key === 'Escape') goHome();
+                return;
+            }
             if (document.getElementById('lessonScreen').classList.contains('active')) {
                 if (e.key === 'ArrowRight') next();
                 if (e.key === 'ArrowLeft') prev();
